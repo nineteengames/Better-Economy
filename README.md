@@ -1,8 +1,10 @@
+[![](https://jitpack.io/v/nineteengames/Better-EconomyAPI.svg)](https://jitpack.io/#nineteengames/Better-EconomyAPI)
 # Better-Economy
 
 Is a simple and free Econmy plugin, with an simple API!
 
 # How to implement?
+How to include the API with Maven:
 ```xml
 <repositories>
     <repository>
@@ -18,6 +20,15 @@ Is a simple and free Econmy plugin, with an simple API!
         <scope>provided</scope>
     </dependency>
 </dependencies>
+```
+How to include the API with Gradle:
+```groovy
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+dependencies {
+    compileOnly "com.github.nineteengames:Better-EconomyAPI:1.0"
+}
 ```
 
 # How to use?
