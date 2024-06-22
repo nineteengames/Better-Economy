@@ -14,7 +14,7 @@ public class PlaceholderAPI extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getIdentifier() {
-        return "Better-Economy";
+        return "BetterEconomy";
     }
 
     @Override
@@ -29,9 +29,12 @@ public class PlaceholderAPI extends PlaceholderExpansion {
 
     @Override
     public String onRequest(OfflinePlayer player, @NotNull String params) {
-        if (params.equalsIgnoreCase("be_players_money")) {
+        if (params.equalsIgnoreCase("players_money")) {
             return String.valueOf(BetterEconomy.getAPI().get(player.getUniqueId()));
         }
-        return null; //
+
+        return null;
+
+
     }
 }
