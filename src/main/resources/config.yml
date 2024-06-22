@@ -1,0 +1,11 @@
+language: "lang_en"
+prefix: "&8[&6Better Economy&8]"
+start_money: 1000
+
+Database:
+  Enable: false
+  Host: localhost
+  Port: 3306
+  Database: datbase
+  Username: username
+  Password: password

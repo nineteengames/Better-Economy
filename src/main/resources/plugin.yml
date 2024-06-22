@@ -1,0 +1,14 @@
+name: Better-Economy
+version: 'Release-1.0.0'
+main: de.ntg.economy.main.BetterEconomy
+authors: [nineteengames]
+description: Best free Economy plugin
+
+softdepend: [PlaceholderAPI]
+commands:
+  pay:
+  eco:
+    aliases:
+      - economy
+      - money
+      -
