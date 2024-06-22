@@ -7,11 +7,10 @@
     <groupId>de.ntg.economy</groupId>
     <artifactId>Better_Economy</artifactId>
     <version>1.0-Release</version>
-    <packaging>jar</packaging>
 
     <name>Better Economy</name>
 
-    <description>MLGRush Plugin</description>
+    <description>Better Economy Plugin</description>
     <properties>
         <java.version>22.0</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -43,6 +42,12 @@
             <version>1.8.8-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-chat</artifactId>
+            <version>1.8-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
         <!-- Test Dependency -->
         <dependency>
             <groupId>junit</groupId>
@@ -62,12 +67,6 @@
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
             <version>2.11.6</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.md-5</groupId>
-            <artifactId>bungeecord-chat</artifactId>
-            <version>1.8-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
