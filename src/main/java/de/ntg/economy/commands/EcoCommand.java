@@ -34,6 +34,10 @@ public class EcoCommand implements CommandExecutor {
                 }
                 BetterEconomy.getInstance().getMessageManager().sendMessage(p, ConfigMessages.OTHER_PLAYERS_MONEY, BetterEconomy.getAPI().get(target.getUniqueId()), target.getName());
             } else if (args.length == 3) {
+                if (!p.hasPermission("BetterEconomy.admin")) {
+                    BetterEconomy.getInstance().getMessageManager().sendMessage(p, ConfigMessages.NO_PERMS, 0, args[0]);
+                    return true;
+                }
 
                 OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
 
