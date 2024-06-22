@@ -1,9 +1,9 @@
-[![](https://jitpack.io/v/nineteengames/Better-EconomyAPI.svg)](https://jitpack.io/#nineteengames/Better-EconomyAPI)
+
 # Better-Economy
 
 Is a simple and free Economy plugin, with an simple API!
 
-# How to implement?
+# How to implement? [![](https://jitpack.io/v/nineteengames/Better-EconomyAPI.svg)](https://jitpack.io/#nineteengames/Better-EconomyAPI)
 How to include the API with Maven:
 ```xml
 <repositories>
