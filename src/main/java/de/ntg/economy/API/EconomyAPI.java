@@ -1,8 +1,10 @@
 package de.ntg.economy.API;
 
 import de.ntg.economy.enums.EconomyResponse;
-import de.ntg.economy.main.BetterEconomy;
+import de.ntg.economy.events.customEvents.onMoneyChangeEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import de.ntg.economy.bettereconomy.BetterEconomy;
 
 import java.util.UUID;
 
@@ -11,7 +13,14 @@ public class EconomyAPI {
     public EconomyResponse give(Player player, int amount) {
         if (isPlayerExisting(player.getUniqueId())) {
             int newAmount = BetterEconomy.getInstance().getData().getBalance(player) + amount;
-            BetterEconomy.getInstance().getData().setBalance(player, newAmount);
+            onMoneyChangeEvent onMoneyChangeEvent = new onMoneyChangeEvent(amount,player.getUniqueId(), newAmount);
+            Bukkit.getPluginManager().callEvent(onMoneyChangeEvent);
+
+            if(onMoneyChangeEvent.isCancelled()){
+                return EconomyResponse.CANCELLED_BY_EVENT;
+            }
+
+            BetterEconomy.getInstance().getData().setBalance(player, onMoneyChangeEvent.getNewAmount());
             return EconomyResponse.SUCCESSFUL;
         } else {
             return EconomyResponse.PLAYER_DOES_NOT_EXISTS;
@@ -30,7 +39,14 @@ public class EconomyAPI {
         if (isPlayerExisting(player.getUniqueId())) {
             if (has(player, amount)) {
                 int newAmount = BetterEconomy.getInstance().getData().getBalance(player) - amount;
-                BetterEconomy.getInstance().getData().setBalance(player, newAmount);
+                onMoneyChangeEvent onMoneyChangeEvent = new onMoneyChangeEvent(amount,player.getUniqueId(), newAmount);
+                Bukkit.getPluginManager().callEvent(onMoneyChangeEvent);
+
+                if(onMoneyChangeEvent.isCancelled()){
+                    return EconomyResponse.CANCELLED_BY_EVENT;
+                }
+
+                BetterEconomy.getInstance().getData().setBalance(player, onMoneyChangeEvent.getNewAmount());
                 return EconomyResponse.SUCCESSFUL;
             } else {
                 return EconomyResponse.PLAYER_DOES_NOT_HAVE_ENOUGH_MONEY;
@@ -43,7 +59,14 @@ public class EconomyAPI {
 
     public EconomyResponse set(Player player, int amount) {
         if (isPlayerExisting(player.getUniqueId())) {
-            BetterEconomy.getInstance().getData().setBalance(player, amount);
+            onMoneyChangeEvent onMoneyChangeEvent = new onMoneyChangeEvent(amount,player.getUniqueId(), amount);
+            Bukkit.getPluginManager().callEvent(onMoneyChangeEvent);
+
+            if(onMoneyChangeEvent.isCancelled()){
+                return EconomyResponse.CANCELLED_BY_EVENT;
+            }
+
+            BetterEconomy.getInstance().getData().setBalance(player, onMoneyChangeEvent.getNewAmount());
             return EconomyResponse.SUCCESSFUL;
         } else {
             return EconomyResponse.PLAYER_DOES_NOT_EXISTS;
@@ -77,7 +100,14 @@ public class EconomyAPI {
     public EconomyResponse give(UUID uuid, int amount) {
         if (isPlayerExisting(uuid)) {
             int newAmount = BetterEconomy.getInstance().getData().getBalance(uuid) + amount;
-            BetterEconomy.getInstance().getData().setBalance(uuid, newAmount);
+            onMoneyChangeEvent onMoneyChangeEvent = new onMoneyChangeEvent(amount,uuid, newAmount);
+            Bukkit.getPluginManager().callEvent(onMoneyChangeEvent);
+
+            if(onMoneyChangeEvent.isCancelled()){
+                return EconomyResponse.CANCELLED_BY_EVENT;
+            }
+
+            BetterEconomy.getInstance().getData().setBalance(uuid, onMoneyChangeEvent.getNewAmount());
             return EconomyResponse.SUCCESSFUL;
         } else {
             return EconomyResponse.PLAYER_DOES_NOT_EXISTS;
@@ -88,7 +118,14 @@ public class EconomyAPI {
         if (isPlayerExisting(uuid)) {
             if (has(uuid, amount)) {
                 int newAmount = BetterEconomy.getInstance().getData().getBalance(uuid) - amount;
-                BetterEconomy.getInstance().getData().setBalance(uuid, newAmount);
+                onMoneyChangeEvent onMoneyChangeEvent = new onMoneyChangeEvent(amount,uuid, newAmount);
+                Bukkit.getPluginManager().callEvent(onMoneyChangeEvent);
+
+                if(onMoneyChangeEvent.isCancelled()){
+                    return EconomyResponse.CANCELLED_BY_EVENT;
+                }
+
+                BetterEconomy.getInstance().getData().setBalance(uuid, onMoneyChangeEvent.getNewAmount());
                 return EconomyResponse.SUCCESSFUL;
             } else {
                 return EconomyResponse.PLAYER_DOES_NOT_HAVE_ENOUGH_MONEY;
@@ -100,7 +137,14 @@ public class EconomyAPI {
 
     public EconomyResponse set(UUID uuid, int amount) {
         if (isPlayerExisting(uuid)) {
-            BetterEconomy.getInstance().getData().setBalance(uuid, amount);
+            onMoneyChangeEvent onMoneyChangeEvent = new onMoneyChangeEvent(amount,uuid, amount);
+            Bukkit.getPluginManager().callEvent(onMoneyChangeEvent);
+
+            if(onMoneyChangeEvent.isCancelled()){
+                return EconomyResponse.CANCELLED_BY_EVENT;
+            }
+
+            BetterEconomy.getInstance().getData().setBalance(uuid, onMoneyChangeEvent.getNewAmount());
             return EconomyResponse.SUCCESSFUL;
         } else {
             return EconomyResponse.PLAYER_DOES_NOT_EXISTS;
