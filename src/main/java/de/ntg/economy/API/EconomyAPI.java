@@ -4,7 +4,7 @@ import de.ntg.economy.enums.EconomyResponse;
 import de.ntg.economy.events.customEvents.onMoneyChangeEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import de.ntg.economy.bettereconomy.BetterEconomy;
+import de.ntg.economy.main.BetterEconomy;
 
 import java.util.UUID;
 
