@@ -9,8 +9,8 @@ public class Config {
         return ChatColor.translateAlternateColorCodes('&', BetterEconomy.getInstance().getConfig().getString("prefix"));
     }
 
-    public int getStartMoney() {
-        return BetterEconomy.getInstance().getConfig().getInt("start_money");
+    public Double getStartMoney() {
+        return BetterEconomy.getInstance().getConfig().getDouble("start_money");
     }
 
     //Mysql
