@@ -27,7 +27,7 @@ public class MessageManager {
         }
     }
 
-    public String getMessage(Player p, ConfigMessages message, int amount, String player_name) {
+    public String getMessage(Player p, ConfigMessages message, double amount, String player_name) {
         String msg = yamlConfiguration.getString(message.name().toLowerCase());
         assert msg != null;
 
@@ -46,7 +46,7 @@ public class MessageManager {
         return msg;
     }
 
-    public void sendMessage(Player p, ConfigMessages message, int amount, String player_name) {
+    public void sendMessage(Player p, ConfigMessages message, double amount, String player_name) {
         p.sendMessage(BetterEconomy.getInstance().getPluginConfig().getPrefix() + getMessage(p, message, amount, player_name));
     }
 }
