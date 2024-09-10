@@ -41,7 +41,7 @@ public class EcoCommand implements CommandExecutor {
 
                 OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
 
-                int amount = Integer.parseInt(args[2]);
+                double amount = Double.parseDouble(args[2]);
 
 
                 if (amount < 0) {
