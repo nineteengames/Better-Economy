@@ -16,7 +16,7 @@ How to include the API with Maven:
     <dependency>
         <groupId>com.github.nineteengames</groupId>
         <artifactId>Better-Economy</artifactId>
-        <version>1.1</version>
+        <version>1.2</version>
         <scope>provided</scope>
     </dependency>
 </dependencies>
@@ -27,7 +27,7 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
-    compileOnly "com.github.nineteengames:Better-Economy:1.1"
+    compileOnly "com.github.nineteengames:Better-Economy:1.2"
 }
 ```
 
