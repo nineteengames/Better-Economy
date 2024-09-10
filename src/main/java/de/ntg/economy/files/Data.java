@@ -70,7 +70,10 @@ public class Data {
 
     public void createTableIfNotExists() throws SQLException {
         if (BetterEconomy.getInstance().getPluginConfig().getDatabaseEnable()) {
-            String query = "CREATE TABLE IF NOT EXISTS BetterEconomy_Data (`id` INT NOT NULL AUTO_INCREMENT , `uuid` VARCHAR(36) NOT NULL , `money` INT NOT NULL, PRIMARY KEY (`id`));";
+            String query = "CREATE TABLE IF NOT EXISTS BetterEconomy_Data" +
+                    " (`id` INT NOT NULL AUTO_INCREMENT " +
+                    ", `uuid` VARCHAR(36) NOT NULL " +
+                    ", `money` DOUBLE NOT NULL, PRIMARY KEY (`id`));";
 
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.execute();
@@ -105,7 +108,7 @@ public class Data {
 
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, player.getUniqueId().toString());
-                statement.setInt(2, BetterEconomy.getInstance().getPluginConfig().getStartMoney());
+                statement.setDouble(2, BetterEconomy.getInstance().getPluginConfig().getStartMoney());
                 statement.execute();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -119,7 +122,7 @@ public class Data {
     }
 
 
-    public int getBalance(Player player) {
+    public double getBalance(Player player) {
         if (BetterEconomy.getInstance().getPluginConfig().getDatabaseEnable()) {
             //mysql: get money
             String query = "SELECT money FROM BetterEconomy_Data WHERE uuid = ?;";
@@ -129,26 +132,26 @@ public class Data {
 
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
-                        return resultSet.getInt("money");
+                        return resultSet.getDouble("money");
                     }
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         } else {
-            return dataConfig.getInt(player.getUniqueId().toString());
+            return dataConfig.getDouble(player.getUniqueId().toString());
         }
         return 0;
     }
 
-    public void setBalance(Player player, int balance) {
+    public void setBalance(Player player, double balance) {
 
         if (BetterEconomy.getInstance().getPluginConfig().getDatabaseEnable()) {
             //mysql: set money
             String query = "UPDATE BetterEconomy_Data SET money=? WHERE uuid=?;";
 
             try (PreparedStatement statement = connection.prepareStatement(query)) {
-                statement.setInt(1, balance);
+                statement.setDouble(1, balance);
                 statement.setString(2, player.getUniqueId().toString());
                 statement.executeUpdate();
             } catch (SQLException e) {
@@ -162,7 +165,7 @@ public class Data {
 
     }
 
-    public int getBalance(UUID uuid) {
+    public double getBalance(UUID uuid) {
         if (BetterEconomy.getInstance().getPluginConfig().getDatabaseEnable()) {
             //mysql: get money
             String query = "SELECT money FROM BetterEconomy_Data WHERE uuid = ?;";
@@ -172,25 +175,25 @@ public class Data {
 
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
-                        return resultSet.getInt("money");
+                        return resultSet.getDouble("money");
                     }
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         } else {
-            return dataConfig.getInt(uuid.toString());
+            return dataConfig.getDouble(uuid.toString());
         }
         return 0;
     }
 
-    public void setBalance(UUID uuid, int balance) {
+    public void setBalance(UUID uuid, double balance) {
         if (BetterEconomy.getInstance().getPluginConfig().getDatabaseEnable()) {
             //mysql: set money
             String query = "UPDATE BetterEconomy_Data SET money=? WHERE uuid=?;";
 
             try (PreparedStatement statement = connection.prepareStatement(query)) {
-                statement.setInt(1, balance);
+                statement.setDouble(1, balance);
                 statement.setString(2, uuid.toString());
                 statement.executeUpdate();
             } catch (SQLException e) {
