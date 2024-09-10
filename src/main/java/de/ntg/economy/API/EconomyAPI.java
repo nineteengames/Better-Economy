@@ -1,52 +1,51 @@
 package de.ntg.economy.API;
 
 import de.ntg.economy.enums.EconomyResponse;
-import de.ntg.economy.events.customEvents.onMoneyChangeEvent;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import de.ntg.economy.main.BetterEconomy;
+import org.bukkit.entity.Player;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 import java.util.UUID;
 
 public class EconomyAPI {
 
-    public EconomyResponse give(Player player, int amount) {
+    // Helper method to round and format amounts to 2 decimal places
+    private double roundToTwoDecimals(double amount) {
+        return Math.round(amount * 100.0) / 100.0;
+    }
+
+    // Helper method to format amounts correctly using a dot as the decimal separator
+    private String formatAmount(double amount) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US); // Ensures "." is used as a decimal separator
+        DecimalFormat df = new DecimalFormat("#0.00", symbols);
+        return df.format(roundToTwoDecimals(amount)); // Round to two decimal places before formatting
+    }
+
+    public EconomyResponse give(Player player, double amount) {
         if (isPlayerExisting(player.getUniqueId())) {
-            int newAmount = BetterEconomy.getInstance().getData().getBalance(player) + amount;
-            onMoneyChangeEvent onMoneyChangeEvent = new onMoneyChangeEvent(amount,player.getUniqueId(), newAmount);
-            Bukkit.getPluginManager().callEvent(onMoneyChangeEvent);
-
-            if(onMoneyChangeEvent.isCancelled()){
-                return EconomyResponse.CANCELLED_BY_EVENT;
-            }
-
-            BetterEconomy.getInstance().getData().setBalance(player, onMoneyChangeEvent.getNewAmount());
+            double newAmount = BetterEconomy.getInstance().getData().getBalance(player) + roundToTwoDecimals(amount);
+            BetterEconomy.getInstance().getData().setBalance(player, roundToTwoDecimals(newAmount));
             return EconomyResponse.SUCCESSFUL;
         } else {
             return EconomyResponse.PLAYER_DOES_NOT_EXISTS;
         }
     }
 
-    public int get(Player player) {
+    public double get(Player player) {
         if (isPlayerExisting(player.getUniqueId())) {
-            return BetterEconomy.getInstance().getData().getBalance(player.getUniqueId());
+            return roundToTwoDecimals(BetterEconomy.getInstance().getData().getBalance(player.getUniqueId()));
         } else {
             return 0;
         }
     }
 
-    public EconomyResponse remove(Player player, int amount) {
+    public EconomyResponse remove(Player player, double amount) {
         if (isPlayerExisting(player.getUniqueId())) {
             if (has(player, amount)) {
-                int newAmount = BetterEconomy.getInstance().getData().getBalance(player) - amount;
-                onMoneyChangeEvent onMoneyChangeEvent = new onMoneyChangeEvent(amount,player.getUniqueId(), newAmount);
-                Bukkit.getPluginManager().callEvent(onMoneyChangeEvent);
-
-                if(onMoneyChangeEvent.isCancelled()){
-                    return EconomyResponse.CANCELLED_BY_EVENT;
-                }
-
-                BetterEconomy.getInstance().getData().setBalance(player, onMoneyChangeEvent.getNewAmount());
+                double newAmount = BetterEconomy.getInstance().getData().getBalance(player) - roundToTwoDecimals(amount);
+                BetterEconomy.getInstance().getData().setBalance(player, roundToTwoDecimals(newAmount));
                 return EconomyResponse.SUCCESSFUL;
             } else {
                 return EconomyResponse.PLAYER_DOES_NOT_HAVE_ENOUGH_MONEY;
@@ -57,23 +56,17 @@ public class EconomyAPI {
         }
     }
 
-    public EconomyResponse set(Player player, int amount) {
+    public EconomyResponse set(Player player, double amount) {
         if (isPlayerExisting(player.getUniqueId())) {
-            onMoneyChangeEvent onMoneyChangeEvent = new onMoneyChangeEvent(amount,player.getUniqueId(), amount);
-            Bukkit.getPluginManager().callEvent(onMoneyChangeEvent);
-
-            if(onMoneyChangeEvent.isCancelled()){
-                return EconomyResponse.CANCELLED_BY_EVENT;
-            }
-
-            BetterEconomy.getInstance().getData().setBalance(player, onMoneyChangeEvent.getNewAmount());
+            BetterEconomy.getInstance().getData().setBalance(player, roundToTwoDecimals(Double.parseDouble(formatAmount(amount))));
             return EconomyResponse.SUCCESSFUL;
         } else {
             return EconomyResponse.PLAYER_DOES_NOT_EXISTS;
         }
     }
 
-    public EconomyResponse pay(Player player, Player target, int amount) {
+    public EconomyResponse pay(Player player, Player target, double amount) {
+        amount = roundToTwoDecimals(Double.parseDouble(formatAmount(amount)));
         if (isPlayerExisting(player.getUniqueId()) && isPlayerExisting(target.getUniqueId())) {
             if (has(player, amount)) {
                 remove(player, amount);
@@ -88,44 +81,29 @@ public class EconomyAPI {
         }
     }
 
-    public boolean has(Player player, int amount) {
+    public boolean has(Player player, double amount) {
         if (isPlayerExisting(player.getUniqueId())) {
-            return BetterEconomy.getInstance().getData().getBalance(player) >= amount;
+            return BetterEconomy.getInstance().getData().getBalance(player) >= roundToTwoDecimals(Double.parseDouble(formatAmount(amount)));
         } else {
             return false;
         }
-
     }
 
-    public EconomyResponse give(UUID uuid, int amount) {
+    public EconomyResponse give(UUID uuid, double amount) {
         if (isPlayerExisting(uuid)) {
-            int newAmount = BetterEconomy.getInstance().getData().getBalance(uuid) + amount;
-            onMoneyChangeEvent onMoneyChangeEvent = new onMoneyChangeEvent(amount,uuid, newAmount);
-            Bukkit.getPluginManager().callEvent(onMoneyChangeEvent);
-
-            if(onMoneyChangeEvent.isCancelled()){
-                return EconomyResponse.CANCELLED_BY_EVENT;
-            }
-
-            BetterEconomy.getInstance().getData().setBalance(uuid, onMoneyChangeEvent.getNewAmount());
+            double newAmount = BetterEconomy.getInstance().getData().getBalance(uuid) + roundToTwoDecimals(Double.parseDouble(formatAmount(amount)));
+            BetterEconomy.getInstance().getData().setBalance(uuid, roundToTwoDecimals(newAmount));
             return EconomyResponse.SUCCESSFUL;
         } else {
             return EconomyResponse.PLAYER_DOES_NOT_EXISTS;
         }
     }
 
-    public EconomyResponse remove(UUID uuid, int amount) {
+    public EconomyResponse remove(UUID uuid, double amount) {
         if (isPlayerExisting(uuid)) {
             if (has(uuid, amount)) {
-                int newAmount = BetterEconomy.getInstance().getData().getBalance(uuid) - amount;
-                onMoneyChangeEvent onMoneyChangeEvent = new onMoneyChangeEvent(amount,uuid, newAmount);
-                Bukkit.getPluginManager().callEvent(onMoneyChangeEvent);
-
-                if(onMoneyChangeEvent.isCancelled()){
-                    return EconomyResponse.CANCELLED_BY_EVENT;
-                }
-
-                BetterEconomy.getInstance().getData().setBalance(uuid, onMoneyChangeEvent.getNewAmount());
+                double newAmount = BetterEconomy.getInstance().getData().getBalance(uuid) - roundToTwoDecimals(Double.parseDouble(formatAmount(amount)));
+                BetterEconomy.getInstance().getData().setBalance(uuid, roundToTwoDecimals(newAmount));
                 return EconomyResponse.SUCCESSFUL;
             } else {
                 return EconomyResponse.PLAYER_DOES_NOT_HAVE_ENOUGH_MONEY;
@@ -135,23 +113,17 @@ public class EconomyAPI {
         }
     }
 
-    public EconomyResponse set(UUID uuid, int amount) {
+    public EconomyResponse set(UUID uuid, double amount) {
         if (isPlayerExisting(uuid)) {
-            onMoneyChangeEvent onMoneyChangeEvent = new onMoneyChangeEvent(amount,uuid, amount);
-            Bukkit.getPluginManager().callEvent(onMoneyChangeEvent);
-
-            if(onMoneyChangeEvent.isCancelled()){
-                return EconomyResponse.CANCELLED_BY_EVENT;
-            }
-
-            BetterEconomy.getInstance().getData().setBalance(uuid, onMoneyChangeEvent.getNewAmount());
+            BetterEconomy.getInstance().getData().setBalance(uuid, roundToTwoDecimals(Double.parseDouble(formatAmount(amount))));
             return EconomyResponse.SUCCESSFUL;
         } else {
             return EconomyResponse.PLAYER_DOES_NOT_EXISTS;
         }
     }
 
-    public EconomyResponse pay(UUID uuidPlayer, UUID uuidTarget, int amount) {
+    public EconomyResponse pay(UUID uuidPlayer, UUID uuidTarget, double amount) {
+        amount = roundToTwoDecimals(Double.parseDouble(formatAmount(amount)));
         if (isPlayerExisting(uuidPlayer) && isPlayerExisting(uuidTarget)) {
             if (has(uuidPlayer, amount)) {
                 remove(uuidPlayer, amount);
@@ -166,18 +138,17 @@ public class EconomyAPI {
         }
     }
 
-    public boolean has(UUID uuid, int amount) {
+    public boolean has(UUID uuid, double amount) {
         if (isPlayerExisting(uuid)) {
-            return BetterEconomy.getInstance().getData().getBalance(uuid) >= amount;
+            return BetterEconomy.getInstance().getData().getBalance(uuid) >= roundToTwoDecimals(Double.parseDouble(formatAmount(amount)));
         } else {
             return false;
         }
-
     }
 
-    public int get(UUID uuid) {
+    public double get(UUID uuid) {
         if (isPlayerExisting(uuid)) {
-            return BetterEconomy.getInstance().getData().getBalance(uuid);
+            return roundToTwoDecimals(BetterEconomy.getInstance().getData().getBalance(uuid));
         } else {
             return 0;
         }
