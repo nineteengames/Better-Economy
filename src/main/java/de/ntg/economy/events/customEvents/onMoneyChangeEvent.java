@@ -10,13 +10,13 @@ import java.util.UUID;
 public class onMoneyChangeEvent extends Event implements Cancellable {
 
 
-    private int change_amount;
-    private int newAmount;
+    private double change_amount;
+    private double newAmount;
     private UUID playersUUID;
     private static final HandlerList HANDLERS_LIST = new HandlerList();
     private boolean isCancelled;
 
-    public onMoneyChangeEvent(int change_amount, UUID playersUUID, int newAmount){
+    public onMoneyChangeEvent(double change_amount, UUID playersUUID, double newAmount){
         this.change_amount = change_amount;
         this.newAmount = newAmount;
         this.playersUUID = playersUUID;
@@ -24,11 +24,11 @@ public class onMoneyChangeEvent extends Event implements Cancellable {
     }
 
 
-    public int getChange_amount() {
+    public double getChange_amount() {
         return change_amount;
     }
 
-    public int getNewAmount() {
+    public double getNewAmount() {
         return newAmount;
     }
 
