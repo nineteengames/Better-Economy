@@ -17,7 +17,7 @@ public class PayCommand implements CommandExecutor {
             if (args.length == 2) {
                 Player target = Bukkit.getPlayer(args[0]);
 
-                int amount = Integer.parseInt(args[1]);
+                double amount = Double.parseDouble(args[1]);
 
 
                 if (amount < 0) {
