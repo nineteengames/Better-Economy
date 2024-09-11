@@ -18,12 +18,6 @@ public class EconomyAPI {
         return Math.round(amount * 100.0) / 100.0;
     }
 
-    // Helper method to format amounts correctly using a dot as the decimal separator
-    private String formatAmount(double amount) {
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US); // Ensures "." is used as a decimal separator
-        DecimalFormat df = new DecimalFormat("#0.00", symbols);
-        return df.format(roundToTwoDecimals(amount)); // Round to two decimal places before formatting
-    }
 
     public EconomyResponse give(Player player, double amount) {
         if (isPlayerExisting(player.getUniqueId())) {
@@ -56,10 +50,10 @@ public class EconomyAPI {
             if(onMoneyChangeEvent.isCancelled()){
                 return EconomyResponse.CANCELLED_BY_EVENT;
             }
-            
+
             BetterEconomy.getInstance().getData().setBalance(player, onMoneyChangeEvent.getNewAmount());
-                
-                
+
+
                 return EconomyResponse.SUCCESSFUL;
             } else {
                 return EconomyResponse.PLAYER_DOES_NOT_HAVE_ENOUGH_MONEY;
@@ -72,7 +66,7 @@ public class EconomyAPI {
 
     public EconomyResponse set(Player player, double amount) {
         if (isPlayerExisting(player.getUniqueId())) {
-            BetterEconomy.getInstance().getData().setBalance(player, roundToTwoDecimals(Double.parseDouble(formatAmount(amount))));
+            BetterEconomy.getInstance().getData().setBalance(player, roundToTwoDecimals(amount));
             onMoneyChangeEvent onMoneyChangeEvent = new onMoneyChangeEvent(roundToTwoDecimals(amount),player.getUniqueId(), roundToTwoDecimals(amount));
             Bukkit.getPluginManager().callEvent(onMoneyChangeEvent);
             return EconomyResponse.SUCCESSFUL;
@@ -82,7 +76,7 @@ public class EconomyAPI {
     }
 
     public EconomyResponse pay(Player player, Player target, double amount) {
-        amount = roundToTwoDecimals(Double.parseDouble(formatAmount(amount)));
+        amount = roundToTwoDecimals(roundToTwoDecimals(amount));
         if (isPlayerExisting(player.getUniqueId()) && isPlayerExisting(target.getUniqueId())) {
             if (has(player, amount)) {
                 remove(player, amount);
@@ -99,7 +93,7 @@ public class EconomyAPI {
 
     public boolean has(Player player, double amount) {
         if (isPlayerExisting(player.getUniqueId())) {
-            return BetterEconomy.getInstance().getData().getBalance(player) >= roundToTwoDecimals(Double.parseDouble(formatAmount(amount)));
+            return BetterEconomy.getInstance().getData().getBalance(player) >= roundToTwoDecimals(amount);
         } else {
             return false;
         }
@@ -107,7 +101,7 @@ public class EconomyAPI {
 
     public EconomyResponse give(UUID uuid, double amount) {
         if (isPlayerExisting(uuid)) {
-            double newAmount = BetterEconomy.getInstance().getData().getBalance(uuid) + roundToTwoDecimals(Double.parseDouble(formatAmount(amount)));
+            double newAmount = BetterEconomy.getInstance().getData().getBalance(uuid) + roundToTwoDecimals(amount);
             BetterEconomy.getInstance().getData().setBalance(uuid, roundToTwoDecimals(newAmount));
             onMoneyChangeEvent onMoneyChangeEvent = new onMoneyChangeEvent(roundToTwoDecimals(amount),uuid, roundToTwoDecimals(newAmount));
             Bukkit.getPluginManager().callEvent(onMoneyChangeEvent);
@@ -120,7 +114,7 @@ public class EconomyAPI {
     public EconomyResponse remove(UUID uuid, double amount) {
         if (isPlayerExisting(uuid)) {
             if (has(uuid, amount)) {
-                double newAmount = BetterEconomy.getInstance().getData().getBalance(uuid) - roundToTwoDecimals(Double.parseDouble(formatAmount(amount)));
+                double newAmount = BetterEconomy.getInstance().getData().getBalance(uuid) - roundToTwoDecimals(amount);
                 BetterEconomy.getInstance().getData().setBalance(uuid, roundToTwoDecimals(newAmount));
                 onMoneyChangeEvent onMoneyChangeEvent = new onMoneyChangeEvent(roundToTwoDecimals(amount),uuid, roundToTwoDecimals(newAmount));
                 Bukkit.getPluginManager().callEvent(onMoneyChangeEvent);
@@ -135,7 +129,7 @@ public class EconomyAPI {
 
     public EconomyResponse set(UUID uuid, double amount) {
         if (isPlayerExisting(uuid)) {
-            BetterEconomy.getInstance().getData().setBalance(uuid, roundToTwoDecimals(Double.parseDouble(formatAmount(amount))));
+            BetterEconomy.getInstance().getData().setBalance(uuid, roundToTwoDecimals(amount));
             onMoneyChangeEvent onMoneyChangeEvent = new onMoneyChangeEvent(roundToTwoDecimals(amount),uuid, roundToTwoDecimals(amount));
             Bukkit.getPluginManager().callEvent(onMoneyChangeEvent);
             return EconomyResponse.SUCCESSFUL;
@@ -145,7 +139,7 @@ public class EconomyAPI {
     }
 
     public EconomyResponse pay(UUID uuidPlayer, UUID uuidTarget, double amount) {
-        amount = roundToTwoDecimals(Double.parseDouble(formatAmount(amount)));
+        amount = roundToTwoDecimals(amount);
         if (isPlayerExisting(uuidPlayer) && isPlayerExisting(uuidTarget)) {
             if (has(uuidPlayer, amount)) {
                 remove(uuidPlayer, amount);
@@ -162,7 +156,7 @@ public class EconomyAPI {
 
     public boolean has(UUID uuid, double amount) {
         if (isPlayerExisting(uuid)) {
-            return BetterEconomy.getInstance().getData().getBalance(uuid) >= roundToTwoDecimals(Double.parseDouble(formatAmount(amount)));
+            return BetterEconomy.getInstance().getData().getBalance(uuid) >= roundToTwoDecimals(amount);
         } else {
             return false;
         }
